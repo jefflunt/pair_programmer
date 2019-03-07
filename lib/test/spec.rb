@@ -20,14 +20,14 @@ module Test
       end
       specs << curr_spec
 
-      specs.collect{ |spec| Spec.new(spec[0], spec[1..-1]) }
+      specs.collect{|spec| Spec.new(spec[0], spec[1..-1]) }
     end
 
     # desc: string, e.g. func sum a b
     # tests: [string], column-based
     def initialize(desc, tests)
       @desc = desc
-      @tests = tests.map{|t| t.split(' ')
+      @tests = tests.map{|t| t.split(' ') }
       parts = desc.split
       @func_name = parts[1]
       @func_params = parts[2..-1] || []
@@ -35,18 +35,10 @@ module Test
     end
 
     def solve
-      solution = Arithmetic.singleton_methods.detect do |sol|
-        details = {
-          name: func_name,
-          params: func_params,
-          body: Arithmetic.send(sol)
-        }
-
-        tests.all?{ |t| eval(Composer.write(details)
+      solution = Code::Solvers::Arithmetic.singleton_methods.detect do |sol|
+        details = Code::Solvers::Arithmetic.send(sol).merge(name: func_name)
+        tests.all?{ |t| eval(Code::Composer.write(details)) }
       end
-      # possible_solutions.each |sol|
-      #   return sol if tests.all?{ |t| sol( ... ) == t.outcome }
-      # end
 
       solution || ':('
     end

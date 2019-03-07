@@ -31,8 +31,9 @@ $LOAD_PATH.unshift './lib'
 require 'colorize'
 require 'code/composer'
 require 'code/solutions/arithmetic'
+require 'test/spec'
 
-specs = Spec.read('arithmetic')
+specs = Test::Spec.read('arithmetic')
 specs.each do |spec|
   puts spec
   puts
